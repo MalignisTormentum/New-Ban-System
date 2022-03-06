@@ -1,6 +1,6 @@
 local HTTPS, DSS = game:GetService('HttpService'), game:GetService('DataStoreService')
 local bans = DSS:GetDataStore('BanDataStore')
-local link = "https://www.malignistormentum.site/database_connection.php"
+local link = "" -- Hiden for public display.
 
 local access_key = "" -- ADD ACCESS KEY HERE.
 

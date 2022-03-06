@@ -9,7 +9,7 @@ import json
 
 client = discord.Client(intents = discord.Intents.all())
 lionEmoji = discord.PartialEmoji(name='🦁')
-prefix, link, access_keys = ">", "https://www.malignistormentum.site/database_connection.php/", {}
+prefix, link, access_keys = ">", "", {}
 
 class Bans:
     def get_all(access_key):
@@ -242,4 +242,4 @@ async def on_message(message):
                     await unban(message)
                     return
 
-client.run('OTQ2OTg0MjI1NzMzNzU5MDE3.YhmpyQ.6yIUTK40VrqE3stMn7b-XyCbknk')
+client.run('') # Hidden for public display.
