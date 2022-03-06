@@ -135,7 +135,7 @@ async def get_user_from_name(message, args):
 
 async def is_ban_sanitized(message, args):
     if len(args) < 4:
-        await message.channel.send("An argument was missing. Usage: ``" + prefix + "ban <user_id> <days> <reason>``")
+        await message.channel.send("An argument was missing. Usage: ``" + prefix + "ban <user> <days> <reason>``")
         return False
     if not args[2].isnumeric():
         await message.channel.send("The days must be a number!")
@@ -175,7 +175,7 @@ async def ban(message: discord.Message):
 
 async def unban(message: discord.Message):
     args = message.content.split()
-    if is_unban_sanitized(message, args):
+    if await is_unban_sanitized(message, args):
         data, user_id, user_name = None, None, None
 
         if args[1].isnumeric():
@@ -200,7 +200,7 @@ async def create_role(message: discord.Message):
         await message.channel.send("Access role created. Administrators may give this role to users who may have access to me.")
         return
     await message.channel.send("My access role already exists!")
-
+    
 
 @client.event
 async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
@@ -242,4 +242,4 @@ async def on_message(message):
                     await unban(message)
                     return
 
-client.run() # Arg hidden for public display.
+client.run('OTQ2OTg0MjI1NzMzNzU5MDE3.YhmpyQ.6yIUTK40VrqE3stMn7b-XyCbknk')
