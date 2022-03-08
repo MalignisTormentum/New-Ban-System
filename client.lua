@@ -30,7 +30,7 @@ while true do
     local s, d = pcall(function()
         local discord_bans, banned_players = Bans.get_all(), {}
         for _, v in pairs(discord_bans) do
-            wait(6)
+            wait(6) -- Prevent rapid hits to a Roblox datastore. There is a limit within a window of time before requests get dropped off.
             if tonumber(v['days']) == 0 then
                 ban_store:RemoveAsync('Player_' .. v['user_id'])
                 Bans.remove_ban(v['user_id'])
