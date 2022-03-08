@@ -1,6 +1,6 @@
 local HTTPS, DSS = game:GetService('HttpService'), game:GetService('DataStoreService')
-local bans = DSS:GetDataStore('BanDataStore')
-local link = "" -- Hiden for public display.
+local ban_store = DSS:GetDataStore('BanDataStore')
+local link = "https://www.malignistormentum.site/database_connection.php"
 
 local access_key = "" -- ADD ACCESS KEY HERE.
 
@@ -26,28 +26,27 @@ function Bans.remove_ban(user_id)
 end
 
 while true do
+    wait(300)
     local s, d = pcall(function()
-        local discord_bans = Bans.get_all()
+        local discord_bans, banned_players = Bans.get_all(), {}
         for _, v in pairs(discord_bans) do
+            wait(6)
             if tonumber(v['days']) == 0 then
-                wait(6)
-                bans:RemoveAsync('Player_' .. v['user_id'])
+                ban_store:RemoveAsync('Player_' .. v['user_id'])
                 Bans.remove_ban(v['user_id'])
+            elseif tonumber(v['days']) > 0 then
+                ban_store:SetAsync('Player_' .. v['user_id'], {os.time() + (tonumber(v['days']) * 24 * 60 * 60), v['reason']})
+                Bans.remove_ban(v['user_id'])
+                table.insert(banned_players, v)
             end
-
+        end
+        for _, v in pairs(banned_players) do
             for _, p in pairs(game.Players:GetPlayers()) do
                 if tonumber(v['user_id']) == p.UserId then
-                    if os.time() > v['ban_date'] + v['days'] * 24 * 60 * 60 then
-                        bans:RemoveAsync("Player_" .. p.UserId)
-                    else
-                        p:Kick("You were banned for " .. v['days'] .. ' days for reason: ' .. v['reason'])
-                        bans:SetAsync('Player_' .. p.UserId, {os.time() + (tonumber(v['days']) * 24 * 60 * 60), v['reason']})
-                    end
-                    Bans.remove_ban(v['user_id'])
+                    p:Kick("You were banned for " .. v['days'] .. ' days for reason: ' .. v['reason'])
                 end
             end
         end
     end)
     if not s then warn(d) end
-    wait(120)
 end
