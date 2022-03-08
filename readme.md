@@ -3,3 +3,5 @@ I have practiced some caching for the bot but more caching could be used through
 This bot is designed to ban players from Roblox games entirely from Discord.
 
 You can use a host such as Host Gator and simply copy my server.php file and upload it as database_connection.php then edit the link vaiable in the client and bot files to be https://www.YOURSITE.com/database_connection.php.
+
+Feel free to message me on Roblox at https://www.roblox.com/users/64825384/profile if you have any issues or suggestions.
