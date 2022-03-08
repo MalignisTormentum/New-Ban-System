@@ -242,4 +242,4 @@ async def on_message(message):
                     await unban(message)
                     return
 
-client.run('') # Hidden for public display.
+client.run('')
