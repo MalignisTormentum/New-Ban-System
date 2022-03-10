@@ -46,33 +46,9 @@ game.Players.PlayerAdded:Connect(function(Player) -- Kick player when they join 
 	end
 end)
 
-local function SendMessage(d)
-	pcall(function()
-		MS:PublishAsync("Message", d)
-	end)
-end
-
-pcall(function()
-	MS:SubscribeAsync("Message", function(t)
-		if not t.Data then
-			isNewestServer = false
-		else
-			for _, Plr in pairs(game.Players:GetPlayers()) do
-				if Plr.UserId == t.Data[1] then
-					Plr:Kick("You were banned for " .. t.Data[2] .. " days for " .. t.Data[3])
-					break
-				end
-			end
-		end
-	end)
-end)
-
-SendMessage(false) -- Have only the most current running game server handle requests to the database and inform the others. This keeps hits to the db low.
-
 coroutine.wrap(function()
 	while true do
 		wait(300)
-		if not isNewestServer then break end
 		local s, d = pcall(function()
 			local discord_bans = Bans.get_all()
 			for _, v in pairs(discord_bans) do
@@ -88,7 +64,6 @@ coroutine.wrap(function()
 							p:Kick("You were banned for " .. days .. ' days for reason: ' .. reason)
 						end
 					end
-					SendMessage({user_id, days, reason})
 				end
 			end
 		end)
