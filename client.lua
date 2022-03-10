@@ -25,7 +25,6 @@ function Bans.remove_ban(user_id)
 	HTTPS:PostAsync(link, HTTPS:JSONEncode(data), Enum.HttpContentType.ApplicationUrlEncoded)
 end
 
-<<<<<<< HEAD
 game.Players.PlayerAdded:Connect(function(Player) -- Kick player when they join if they are banned.
 	local success, data = pcall(function()  
 		return store:GetAsync("Player_" .. Player.UserId)
@@ -96,30 +95,3 @@ coroutine.wrap(function()
 		if not s then warn(d) end
 	end
 end)()
-=======
-while true do
-    wait(300)
-    local s, d = pcall(function()
-        local discord_bans, banned_players = Bans.get_all(), {}
-        for _, v in pairs(discord_bans) do
-            wait(6) -- Prevent rapid hits to a Roblox datastore. There is a limit within a window of time before requests get dropped off.
-            if tonumber(v['days']) == 0 then
-                ban_store:RemoveAsync('Player_' .. v['user_id'])
-                Bans.remove_ban(v['user_id'])
-            elseif tonumber(v['days']) > 0 then
-                ban_store:SetAsync('Player_' .. v['user_id'], {os.time() + (tonumber(v['days']) * 24 * 60 * 60), v['reason']})
-                Bans.remove_ban(v['user_id'])
-                table.insert(banned_players, v)
-            end
-        end
-        for _, v in pairs(banned_players) do
-            for _, p in pairs(game.Players:GetPlayers()) do
-                if tonumber(v['user_id']) == p.UserId then
-                    p:Kick("You were banned for " .. v['days'] .. ' days for reason: ' .. v['reason'])
-                end
-            end
-        end
-    end)
-    if not s then warn(d) end
-end
->>>>>>> 6acff88d9969ab4325726531fc4cacefa5d90a69
