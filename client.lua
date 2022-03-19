@@ -2,7 +2,7 @@ local HTTPS, DSS, MS = game:GetService('HttpService'), game:GetService('DataStor
 local store = DSS:GetDataStore('BanDataStore')
 local link, isNewestServer = "", true
 
-local access_key = "" -- ADD ACCESS KEY HERE.
+local access_key = "DisasterKey123" -- ADD ACCESS KEY HERE.
 
 if access_key == "" then
 	error("Your access key must be set and it must be the same as the one used on Discord.")
@@ -46,9 +46,36 @@ game.Players.PlayerAdded:Connect(function(Player) -- Kick player when they join 
 	end
 end)
 
+local function SendMessage(async, d)
+	pcall(function()
+		MS:PublishAsync(async, d)
+	end)
+end
+
+pcall(function()
+	MS:SubscribeAsync("Ban", function(t)
+		for _, Plr in pairs(game.Players:GetPlayers()) do
+			if Plr.UserId == tonumber(t.Data[1]) then
+				Plr:Kick("You were banned for " .. t.Data[2] .. " days for " .. t.Data[3])
+				break
+			end
+		end
+	end)
+end)
+
+pcall(function()
+	MS:SubscribeAsync("SetCurrentServer", function(t)
+		if t.Data ~= game.JobId then
+			isNewestServer = false
+		end
+	end)
+end)
+
+
+SendMessage("SetCurrentServer", game.JobId) -- Have only the most current running game server handle requests to the database and inform the others. This keeps hits to the db low.
+
 coroutine.wrap(function()
 	while true do
-		wait(300)
 		local s, d = pcall(function()
 			local discord_bans = Bans.get_all()
 			for _, v in pairs(discord_bans) do
@@ -64,9 +91,12 @@ coroutine.wrap(function()
 							p:Kick("You were banned for " .. days .. ' days for reason: ' .. reason)
 						end
 					end
+					SendMessage("Ban", {user_id, days, reason})
 				end
 			end
 		end)
 		if not s then warn(d) end
+		wait(10)
+		if not isNewestServer then break end
 	end
 end)()
