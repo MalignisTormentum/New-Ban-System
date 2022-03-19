@@ -96,7 +96,7 @@ coroutine.wrap(function()
 			end
 		end)
 		if not s then warn(d) end
-		wait(10)
+		wait(120)
 		if not isNewestServer then break end
 	end
 end)()
