@@ -2,7 +2,7 @@ local HTTPS, DSS, MS = game:GetService('HttpService'), game:GetService('DataStor
 local store = DSS:GetDataStore('BanDataStore')
 local link, isNewestServer = "", true
 
-local access_key = "DisasterKey123" -- ADD ACCESS KEY HERE.
+local access_key = "" -- ADD ACCESS KEY HERE.
 
 if access_key == "" then
 	error("Your access key must be set and it must be the same as the one used on Discord.")
@@ -71,7 +71,6 @@ pcall(function()
 	end)
 end)
 
-
 SendMessage("SetCurrentServer", game.JobId) -- Have only the most current running game server handle requests to the database and inform the others. This keeps hits to the db low.
 
 coroutine.wrap(function()
@@ -96,7 +95,7 @@ coroutine.wrap(function()
 			end
 		end)
 		if not s then warn(d) end
-		wait(120)
 		if not isNewestServer then break end
+		wait(30)
 	end
 end)()

@@ -6,7 +6,6 @@ CREATE TABLE `bans` (
   `access_key` varchar(24) NOT NULL
 );
 
-
 CREATE TABLE `guild_settings` (
   `access_key` varchar(24) NOT NULL,
   `guild_id` varchar(24) NOT NULL
